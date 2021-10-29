@@ -70,6 +70,7 @@ jobs:
             terraform -chdir=./terraform/ecs apply \
               -var docker_img_name=${DOCKER_LOGIN}/${CIRCLE_PROJECT_REPONAME} \
               -var docker_img_tag=0.1.<< pipeline.number >> \
+              -var key_pair=devrel-angel-rivera \
               -auto-approve
             export ENDPOINT="$(terraform -chdir=./terraform/ecs output load_balancer_hostname)"
             mkdir -p /tmp/ecs/
