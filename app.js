@@ -4,7 +4,7 @@ var app = express();
 var exports = module.exports = {};
 const LaunchDarkly = require('launchdarkly-node-server-sdk');
 
-const client = LaunchDarkly.init(process.env.LAUNCHDARKLY_SDK_KEY)
+const client = LaunchDarkly.init(process.env.LAUNCHDARKLY_TOKEN)
 
 const user = {
     "key": "circleci",
