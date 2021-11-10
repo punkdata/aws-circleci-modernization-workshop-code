@@ -21,5 +21,6 @@ describe("Welcome to CI/CD Server", function() {
       var message = "Welcome to CI/CD 101 using CircleCI!";
       assert.equal(res, message);
     });  
-  });
+ });
+  process.exit(0);
 });
