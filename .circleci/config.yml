@@ -8,7 +8,7 @@ orbs:
 jobs:
   run_tests:
     docker:
-      - image: cimg/node:14.16.0
+      - image: cimg/node:16
     steps:
       - checkout
       - node/install-packages:
@@ -25,7 +25,7 @@ jobs:
           path: test-results          
   scan_app:
     docker:
-      - image: cimg/node:14.16.0
+      - image: cimg/node:16
     steps:
       - checkout
       - run:
@@ -78,7 +78,7 @@ jobs:
           root: /tmp/ecs/
           paths:
             - "*"      
-      - run: sleep 80
+      - run: sleep 90
   smoketest_deployment:
     machine:
       image: ubuntu-2004:202101-01
