@@ -4,7 +4,6 @@ orbs:
   aws-cli: circleci/aws-cli@2.0.2
   node: circleci/node@4.2.0
   docker: circleci/docker@1.5.0
-  terraform: circleci/terraform@3.0.0
   pulumi: pulumi/pulumi@2.0.0
 jobs:
   run_tests:
@@ -48,38 +47,6 @@ jobs:
       - docker/push:
           image: $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME
           tag: 0.1.<< pipeline.number >>
-  terraform_deploy_aws_ecs:
-    machine:
-      image: ubuntu-2004:202101-01
-    resource_class: arm.medium
-    steps:
-      - checkout
-      - run:
-          name: Create .terraformrc file locally
-          command: echo "credentials \"app.terraform.io\" {token = \"$TERRAFORM_TOKEN\"}" > $HOME/.terraformrc
-      - terraform/install:
-          terraform_version: "1.0.2"
-          arch: "arm64"
-          os: "linux"
-      - terraform/init:
-          path: ./terraform/ecs
-      - terraform/plan:
-          path: ./terraform/ecs
-      - run:
-          name: Terraform apply
-          command: |
-            terraform -chdir=./terraform/ecs apply \
-              -var docker_img_name=${DOCKER_LOGIN}/${CIRCLE_PROJECT_REPONAME} \
-              -var docker_img_tag=0.1.<< pipeline.number >> \
-              -auto-approve
-            export ENDPOINT="$(terraform -chdir=./terraform/ecs output load_balancer_hostname)"
-            mkdir -p /tmp/ecs/
-            echo 'export ENDPOINT='${ENDPOINT} > /tmp/ecs/endpoint
-      - persist_to_workspace:
-          root: /tmp/ecs/
-          paths:
-            - "*"      
-      - run: sleep 90
   pulumi_deploy_aws_ecs:
     docker:
       - image: circleci/python:3.9
@@ -97,7 +64,7 @@ jobs:
             pulumi stack select dev
             pulumi config set aws:region "us-east-1"
             pulumi config set ecs:ami "ami-0c3dda3deab25a563"
-            pulumi config set ecs:key_pair "devrel-angel-rivera"
+            pulumi config set ecs:key_pair "ee-default-keypair"
             pulumi config set ecs:ec2_type "t4g.medium"
             pulumi config set ecs:iam_profile "ec2ECSRole"
             pulumi config set ecs:asg_min 3
@@ -133,7 +100,7 @@ jobs:
           command: |
             source /tmp/ecs/endpoint
             ./test/smoke_test $ENDPOINT
-  terraform_destroy_aws_ecs:
+  destroy_aws_ecs:
     machine:
       image: ubuntu-2004:202101-01
     resource_class: arm.medium
