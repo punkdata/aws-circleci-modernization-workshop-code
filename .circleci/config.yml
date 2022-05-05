@@ -95,7 +95,7 @@ jobs:
             ./test/smoke_test $ENDPOINT
   newman_smoketest:
     docker:
-     - image: postman/newman
+     - image: cimg/node:14.16.0
     steps:
       - checkout
       - attach_workspace:
@@ -104,6 +104,7 @@ jobs:
           name: Update Postman Env host-url
           command: |
             source /tmp/ecs/endpoint
+            npm install -g newman
             curl --location -g --request PUT 'https://api.getpostman.com/environments/a297f3e8-03a3-4802-8f2c-21398c28aaf7' \
                 --header 'Content-Type: application/json' \
                 --header 'X-API-Key: $POSTMAN_API_KEY' \
