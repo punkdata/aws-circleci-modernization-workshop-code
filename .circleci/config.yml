@@ -151,6 +151,9 @@ workflows:
       - smoketest_deployment:
           requires:
             - deploy_aws_ecs
+      - newman_smoketest:
+          requires:
+            - smoketest_deployment
       - approve_destroy:
           type: approval
           requires:
