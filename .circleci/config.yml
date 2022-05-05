@@ -95,7 +95,7 @@ jobs:
             ./test/smoke_test $ENDPOINT
   newman_smoketest:
     docker:
-     - image: cimg/node:14.16.0
+     - image: postman/newman
     steps:
       - checkout
       - attach_workspace:
