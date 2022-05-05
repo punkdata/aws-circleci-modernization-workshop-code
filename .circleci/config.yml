@@ -107,20 +107,20 @@ jobs:
             sudo npm install -g newman
             curl --location -g --request PUT 'https://api.getpostman.com/environments/a297f3e8-03a3-4802-8f2c-21398c28aaf7' \
                 --header 'Content-Type: application/json' \
-                --header 'X-API-Key: $POSTMAN_API_KEY' \
+                --header 'X-API-Key: '"$POSTMAN_API_KEY"'' \
                   --data-raw '{
                       "environment": {
                           "values": [
                               {
                                   "key": "host-url",
-                                  "value": "$ENDPOINT"
+                                  "value": "'"$ENDPOINT"'"
                               }
                           ]
                       }
                   }'
       - newman/newman-run:
-          collection: https://api.getpostman.com/collections/85d349a8-a486-431d-a258-aaf94f91915d?apikey=$POSTMAN_API_KEY
-          environment: https://api.getpostman.com/environments/a297f3e8-03a3-4802-8f2c-21398c28aaf7?apikey=$POSTMAN_API_KEY
+          collection: "https://api.getpostman.com/collections/85d349a8-a486-431d-a258-aaf94f91915d?apikey="$POSTMAN_API_KEY
+          environment: "https://api.getpostman.com/environments/a297f3e8-03a3-4802-8f2c-21398c28aaf7?apikey="$POSTMAN_API_KEY
   destroy_aws_ecs:
     machine:
       image: ubuntu-2004:202101-01
