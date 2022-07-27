@@ -128,5 +128,5 @@ workflows:
           requires:
             - smoketest_deployment
       - terraform_destroy_aws_ecs:
-          requires:update
+          requires:
             - approve_destroy
