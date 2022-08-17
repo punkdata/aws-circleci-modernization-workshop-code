@@ -111,6 +111,7 @@ jobs:
           path: ./terraform/ecs
       - terraform/destroy:
           path: ./terraform/ecs
+          
 workflows:
   build:
     jobs:
